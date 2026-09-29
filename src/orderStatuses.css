@@ -1,0 +1,19 @@
+.status-cancelled,
+.status-expired {
+  color: var(--red);
+  background: #f5ded7;
+}
+
+.cancel-order-button {
+  padding: 6px 9px;
+  border: 1px solid #e6b7aa;
+  border-radius: 5px;
+  background: #f5ded7;
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.cancel-order-button:disabled {
+  opacity: .55;
+}
