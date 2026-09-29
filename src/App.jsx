@@ -392,6 +392,7 @@ function OrdersPage({ orders, loggedIn, busy, stripeEnabled, onPay, onCancel, on
             {order.status === "PENDING_PAYMENT" && order.expiresAt && <p>Payment due by {new Date(order.expiresAt).toLocaleString()}</p>}
             {activeStripe && <p>Stripe checkout is active. Complete payment before the reservation expires.</p>}
             {order.stripeStatus === "EXPIRED" && order.status === "PENDING_PAYMENT" && <p>Stripe checkout expired. Cancel this order to release its stock.</p>}
+            {order.status === "READY" && order.pickupCode && <div className="pickup-code-card"><span>Show this code to staff when you collect your order</span><strong>{order.pickupCode}</strong></div>}
           </div>
           <div className="order-card-right"><span className={'status status-' + order.status.toLowerCase()}>{order.status.replaceAll("_", " ")}</span>
             <strong>{formatMoney(order.totalAmount)}</strong>
