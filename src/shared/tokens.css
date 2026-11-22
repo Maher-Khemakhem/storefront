@@ -1,0 +1,157 @@
+/*
+ * Shared design tokens for the staff ERP (Counter) and the storefront (Marché Central).
+ * This file is intentionally identical in both apps:
+ *   supermarket-erp/src/shared/tokens.css
+ *   supermarket-storefront/src/shared/tokens.css
+ * Run `node scripts/check-shared-ui.mjs` from the repository root after editing either copy.
+ *
+ * Brand: both apps use the same blue palette (--brand-*). Each app may still choose its display font
+ * and radius. Semantic tokens (status colors, spacing, type scale, z-index, motion) must stay identical so
+ * "paid", "pending", "cancelled" or "out of stock" look and read the same on both surfaces.
+ */
+:root {
+  /* Brand blue, shared by Counter (ERP) and Marché Central (storefront). */
+  --brand-950: #0E2A47;
+  --brand-900: #143A63;
+  --brand-700: #1A5190;
+  --brand-600: #1D62A8; /* primary actions: 6.4:1 with white text */
+  --brand-500: #2F7BC4;
+  --brand-200: #C3DAF0;
+  --brand-100: #DFEBF8;
+  --brand-50: #EEF4FB;
+  --accent: #F5C542; /* highlights only; always paired with --on-accent text (9:1) */
+  --on-accent: #0E2A47;
+  --focus-ring-color: #1D62A8;
+
+  /* Spacing: 4px scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Type scale (body text never below 12px) */
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 32px;
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Neutral surfaces */
+  --color-surface: #FFFFFF;
+  --color-border: #DCE4E2;
+  --color-border-strong: #B5C4C0;
+
+  /* Semantic status colors: foreground passes 4.5:1 on its own background */
+  --color-success: #1E6B45;
+  --color-success-bg: #E3F2E8;
+  --color-success-border: #A7D1B6;
+  --color-warning: #8A5A0B;
+  --color-warning-bg: #FCF0D4;
+  --color-warning-border: #E4C58C;
+  --color-danger: #A3352F;
+  --color-danger-bg: #FBE4E0;
+  --color-danger-border: #E6B7AA;
+  --color-info: #1A5190;
+  --color-info-bg: #E2EEF8;
+  --color-info-border: #A9C8E2;
+  --color-neutral: #4F5D5A;
+  --color-neutral-bg: #EEF1F0;
+  --color-neutral-border: #CBD3D1;
+
+  /* Elevation */
+  --shadow-1: 0 1px 2px rgba(20, 35, 30, .06);
+  --shadow-2: 0 6px 18px rgba(20, 35, 30, .08);
+  --shadow-3: 0 20px 56px rgba(20, 35, 30, .18);
+
+  /* Layers */
+  --z-sticky: 10;
+  --z-nav: 20;
+  --z-toast: 40;
+  --z-modal: 100;
+  --z-skip: 150;
+
+  /* Motion */
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --ease-standard: cubic-bezier(.2, 0, 0, 1);
+}
+
+/* Money, quantities and dates line up in columns. */
+.num { font-variant-numeric: tabular-nums; }
+
+/* Visible to screen readers only. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Status is never color alone: every badge carries a text label and a shape cue. */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 3px 9px;
+  border: 1px solid var(--color-neutral-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-neutral-bg);
+  color: var(--color-neutral);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.status-badge::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status-badge[data-tone="success"] { border-color: var(--color-success-border); background: var(--color-success-bg); color: var(--color-success); }
+.status-badge[data-tone="warning"] { border-color: var(--color-warning-border); background: var(--color-warning-bg); color: var(--color-warning); }
+.status-badge[data-tone="warning"]::before { border-radius: 1px; transform: rotate(45deg); }
+.status-badge[data-tone="danger"] { border-color: var(--color-danger-border); background: var(--color-danger-bg); color: var(--color-danger); }
+.status-badge[data-tone="danger"]::before { border-radius: 1px; }
+.status-badge[data-tone="info"] { border-color: var(--color-info-border); background: var(--color-info-bg); color: var(--color-info); }
+.status-badge[data-tone="neutral"]::before { background: transparent; border: 1.5px solid currentColor; }
+
+/* Order progress: same steps for staff and customers. */
+.order-progress { display: flex; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.order-progress li {
+  flex: 1 1 0;
+  min-width: 0;
+  padding-top: 8px;
+  border-top: 4px solid var(--color-neutral-border);
+  color: var(--color-neutral);
+  font-size: var(--text-xs);
+  line-height: 1.3;
+}
+.order-progress li[data-state="done"] { border-top-color: var(--color-success); color: var(--color-success); }
+.order-progress li[data-state="current"] { border-top-color: var(--color-info); color: var(--color-info); font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-fast: 0ms; --motion-base: 0ms; }
+}

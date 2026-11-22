@@ -31,7 +31,7 @@ test("unchanged quantities are not saved again", async () => {
 });
 
 test("invalid quantity anywhere prevents every update", async () => {
-  await assert.rejects(saveCartQuantities({ items: [milk, tomato] }, { milk: "3", tomato: "0.0001" }, () => assert.fail("invalid cart was saved")), /three decimal/);
+  await assert.rejects(saveCartQuantities({ items: [milk, tomato] }, { milk: "3", tomato: "0.0001" }, () => assert.fail("invalid cart was saved")), /trois décimales/);
 });
 
 test("a failed save stops checkout and preserves completed saves", async () => {
@@ -60,9 +60,9 @@ test("EUR cents match the backend HALF_UP rounding at the minimum charge", () =>
 });
 
 test("payment limits use the server configuration and allow valid totals", () => {
-  assert.match(paymentLimitMessage("1.649 TND", config), /at least 0.50 EUR/);
+  assert.match(paymentLimitMessage("1.649 TND", config), /au moins 0,50 EUR/);
   assert.equal(paymentLimitMessage("1.650 TND", config), "");
-  assert.match(paymentLimitMessage("4000000 TND", config), /exceeds/);
+  assert.match(paymentLimitMessage("4000000 TND", config), /dépasse/);
   assert.equal(paymentLimitMessage("0.001 TND", { ...config, enabled: false }), "");
   assert.equal(paymentLimitMessage(undefined, config), "");
 });

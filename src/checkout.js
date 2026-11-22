@@ -4,13 +4,13 @@ export function quantityRequest(item, value) {
   const text = String(value).trim().replace(",", ".");
   const quantity = Number(text);
   if (!/^\d+(?:\.\d+)?$/.test(text) || !Number.isFinite(quantity) || quantity <= 0) {
-    throw new Error(`Enter a quantity greater than zero for ${item.productName || item.name}.`);
+    throw new Error(`Saisissez une quantité supérieure à zéro pour ${item.productName || item.name}.`);
   }
   if (item.unitType === "EACH" && (!Number.isInteger(quantity) || quantity > 2147483647)) {
-    throw new Error(`${item.productName || item.name} must have a whole-unit quantity.`);
+    throw new Error(`${item.productName || item.name} se commande en unités entières.`);
   }
   if (item.unitType === "WEIGHT" && (text.split(".")[1] || "").replace(/0+$/, "").length > 3) {
-    throw new Error(`Use up to three decimal places for ${item.productName || item.name}.`);
+    throw new Error(`Utilisez au plus trois décimales pour ${item.productName || item.name}.`);
   }
   return { productId: item.productId || item.id, quantityValue: quantity, unitType: item.unitType };
 }
@@ -56,10 +56,10 @@ export function paymentLimitMessage(total, config) {
   const cents = convertedCents(total, config.rate);
   if (cents === null) return "";
   if (cents < config.minimumAmountCents) {
-    return `Stripe requires at least ${(config.minimumAmountCents / 100).toFixed(2)} ${config.currency} after currency conversion. Increase quantities or add another product.`;
+    return `Stripe exige au moins ${(config.minimumAmountCents / 100).toFixed(2).replace(".", ",")} ${config.currency} après conversion. Augmentez les quantités ou ajoutez un autre produit.`;
   }
   if (cents > config.maximumAmountCents) {
-    return `This order exceeds Stripe’s ${(config.maximumAmountCents / 100).toFixed(2)} ${config.currency} payment limit. Reduce quantities or split the order.`;
+    return `Cette commande dépasse la limite de paiement Stripe de ${(config.maximumAmountCents / 100).toFixed(2).replace(".", ",")} ${config.currency}. Réduisez les quantités ou scindez la commande.`;
   }
   return "";
 }

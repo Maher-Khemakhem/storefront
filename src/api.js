@@ -1,4 +1,9 @@
+import { DEFAULT_LOCALE, formatMoney as formatSharedMoney, quantityNumber } from "./shared/format.js";
+
 const SESSION_KEY = "supermarket-storefront-session";
+
+/** Numbers and dates are French (Tunisia): 0,000 TND, 12 nov. 2026. */
+export const LOCALE = DEFAULT_LOCALE;
 
 export function readSession() {
   try {
@@ -10,12 +15,20 @@ export function readSession() {
 }
 
 export function saveSession(session) {
-  window.localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  try {
+    window.localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  } catch {
+    // Storage can be blocked (private mode, policies); the session still works for this tab.
+  }
   return session;
 }
 
 export function clearSession() {
-  window.localStorage.removeItem(SESSION_KEY);
+  try {
+    window.localStorage.removeItem(SESSION_KEY);
+  } catch {
+    // Nothing persisted, nothing to clear.
+  }
 }
 
 export async function apiRequest(path, { method = "GET", body, token } = {}) {
@@ -37,7 +50,7 @@ export async function apiRequest(path, { method = "GET", body, token } = {}) {
   }
 
   if (!response.ok) {
-    const error = new Error(payload?.message || (typeof payload === "string" && payload) || `Request failed (${response.status})`);
+    const error = new Error(payload?.message || (typeof payload === "string" && payload) || `La requête a échoué (${response.status})`);
     error.status = response.status;
     error.path = path;
     throw error;
@@ -52,13 +65,7 @@ export function assetUrl(path) {
 }
 
 export function formatMoney(value) {
-  const amount = Number.parseFloat(
-    String(value ?? "").replace(/\s*TND\s*$/i, "")
-  );
-  return Number.isFinite(amount) ? `${amount.toFixed(3)} TND` : "Price unavailable";
+  return formatSharedMoney(value, { locale: LOCALE, fallback: "Prix indisponible" });
 }
 
-export function quantityNumber(quantity) {
-  const value = Number.parseFloat(String(quantity || "0").replace(/[^0-9.\-]/g, ""));
-  return Number.isFinite(value) ? value : 0;
-}
+export { quantityNumber };

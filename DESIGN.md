@@ -3,13 +3,13 @@
 A grocery storefront should help customers find products, compare prices,
 choose units or kilograms, and manage their basket.
 
-Palette: forest `#174A34`, leaf `#246646`, mint `#E8F2E9`, lemon `#F1D65A`,
-white `#FFFFFF`, muted text `#5B7062`. Use lemon for the introductory shopping
-action and forest for purchase controls.
+Palette: the same brand blue as the staff app (`--brand-*` in `src/shared/tokens.css`): deep blue `#143A63` for
+headings and the top bar, action blue `#1D62A8` for purchase controls, pale blue `#EEF4FB` for panels. The yellow accent
+`#F5C542` is used only for the logo mark and the basket count, always with dark blue `#0E2A47` text (9:1 contrast).
 
 Outfit carries the brand, headings, and product names; DM Sans handles body
 copy and controls. Keep fallbacks local, labels in sentence case, and monetary
-amounts in three-decimal TND. Content and product details align left.
+amounts in French three-decimal TND (`0,000 TND`). Content and product details align left.
 
 ```text
 ┌───────────────────────────────────────────────┐
@@ -40,3 +40,14 @@ Basket edits save with Update or automatically before placing the order, so
 typing does not issue intermediate requests and checkout cannot skip drafts.
 Show the server-calculated VAT and total, and use the configured payment limits
 to explain currency conversion constraints before creating a reservation.
+
+## Shared with the other frontend
+
+`src/shared/` is identical in the staff ERP and the storefront: semantic tokens
+(status colors, spacing, type scale, z-index, motion), `format.js` (TND money with
+three decimals via `Intl`, quantities, dates, VAT rates), `orderStatus.js` and the
+`OrderStatusBadge` / `OrderProgress` components. An online order has the same tone
+and progress steps on both surfaces: French operational labels for staff, friendly
+English labels for customers. Status is never shown by color alone. Edit one copy,
+copy it to the other app, then run `node scripts/check-shared-ui.mjs` from the
+repository root. Brand colors and display fonts stay app-specific.
